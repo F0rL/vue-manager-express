@@ -2,8 +2,8 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
-
 const User = require('../../model/User')
+const gravatar = require('gravatar')
 
 // $route   GET api/users/test
 // @desc    返回请求的json数据
@@ -22,10 +22,13 @@ router.post('/register', (req, res) => {
         if(user){
           return res.status(400).json({email: '邮箱已被注册'})
         }else {
+          let avatar = gravatar.url(req.body.email, {s: '200', r: 'pg', d: 'mm'})
+
           const newUser = new User({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
+            avatar
           })
 
           bcrypt.genSalt(10, function(err, salt) {
