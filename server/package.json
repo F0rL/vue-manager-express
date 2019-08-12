@@ -1,16 +1,17 @@
 {
-  "name": "node-server",
+  "name": "express",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "server": "nodemon server.js"
+    "start": "node server",
+    "server": "nodemon server"
   },
   "keywords": [
     "express",
-    "node"
+    "node",
+    "mongodb"
   ],
   "author": "F0rl",
   "license": "ISC",

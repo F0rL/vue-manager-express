@@ -3,11 +3,11 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-  res.send('hello kuma')
+  res.send('hello world')
 })
 
-const port = process.env.port || 8080
+let port = process.env.port || 8080
 
-app.listen(port, () => {
-  console.log(`server listening on port ${port}!`)
+app.listen(port, ()=> {
+  console.log(`Server is listening on port ${port}`)
 })
