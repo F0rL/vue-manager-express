@@ -6,6 +6,7 @@ const User = require('../../model/User')
 const gravatar = require('gravatar')
 const jwt = require('jsonwebtoken')
 const jwtKey = require('../../config/keys.js').secretOrKey
+const password = require('passport')
 
 // $route   GET api/users/test
 // @desc    返回请求的json数据
@@ -71,7 +72,7 @@ router.post('/login', (req, res) => {
 
                     res.json({
                       success: true,
-                      token: 'kuma' + token
+                      token: 'Bearer ' + token
                     })
                   })
                 }else {
@@ -79,6 +80,17 @@ router.post('/login', (req, res) => {
                 }
               })
       })
+})
+
+// $route   GET api/users/current
+// @desc    return current user
+// @access  Private
+router.get('/current', password.authenticate('jwt', {session: false}), (req, res) => {
+  res.json({
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email
+  })
 })
 
 module.exports = router
