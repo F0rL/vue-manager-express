@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-
+const bodyParser = require('body-parser')
 const app = express()
 
 //users.js
@@ -9,6 +9,11 @@ const users = require('./routes/api/users')
 //DB config
 const dbURI = require('./config/keys').mongoURI
 
+//使用body-parser中间件
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
+
+//Connect to mongodb
 mongoose.connect(dbURI, {useNewUrlParser: true})
         .then(() => console.log('MongoDB Connected'))
         .catch(error => console.log(error))
