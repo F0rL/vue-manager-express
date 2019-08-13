@@ -24,6 +24,7 @@ mongoose.connect(dbURI, {useNewUrlParser: true})
 app.use(passport.initialize());
 
 require('./config/passport')(passport)
+
 // app.get('/', (req, res) => {
 //   res.send('hello world')
 // })
