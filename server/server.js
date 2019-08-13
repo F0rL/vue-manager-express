@@ -7,6 +7,8 @@ const app = express()
 
 //users.js
 const users = require('./routes/api/users')
+//profile.js
+const profiles = require('./routes/api/profiles')
 
 //DB config
 const dbURI = require('./config/keys').mongoURI
@@ -30,6 +32,8 @@ require('./config/passport')(passport)
 // })
 
 app.use('/api/users', users)
+app.use('/api/profiles', profiles)
+
 
 let port = process.env.port || 8080
 
