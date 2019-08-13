@@ -35,7 +35,7 @@ app.use('/api/users', users)
 app.use('/api/profiles', profiles)
 
 
-let port = process.env.port || 8080
+let port = process.env.port || 3000
 
 app.listen(port, ()=> {
   console.log(`Server is listening on port ${port}`)
