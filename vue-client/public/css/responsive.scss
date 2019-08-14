@@ -1,0 +1,13 @@
+$pc: 600px;
+
+@mixin pc {
+  @media (min-width: $pc + 1) {
+      @content
+  }
+};
+
+@mixin phone {
+  @media (max-width: $pc) {
+      @content
+  }
+}
