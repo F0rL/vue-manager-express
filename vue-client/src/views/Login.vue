@@ -1,45 +1,32 @@
 <template>
-  <div class="register">
+  <div class="login">
     <section class="form_container">
       <div class="manage_tip">
         <h1 class="title">在线后台管理系统</h1>
       </div>
       <el-form
-        :model="registerUser"
+        :model="loginUser"
         status-icon
         :rules="rules"
-        ref="registerForm"
-        class="registerForm"
+        ref="loginForm"
+        class="loginForm"
         label-width="auto"
       >
-        <el-form-item label="用户名" prop="name">
-          <el-input type="text" v-model="registerUser.name" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item
           prop="email"
           label="邮箱"
         >
-          <el-input v-model="registerUser.email"></el-input>
+          <el-input v-model="loginUser.email"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="registerUser.password" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
-          <el-input type="password" v-model="registerUser.checkPass" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="选择身份" prop="identity">
-          <el-select v-model="registerUser.identity" placeholder="请选择">
-            <el-option label="管理员" value="manager"></el-option>
-            <el-option label="员工" value="employee"></el-option>
-          </el-select>
+          <el-input type="password" v-model="loginUser.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="submit_btn" @click="submitForm('registerForm')">注册</el-button>
-          <el-button @click="resetForm('registerForm')">重置</el-button>
+          <el-button type="primary" class="submit_btn" @click="submitForm('loginForm')">登录</el-button>
         </el-form-item>
       </el-form>
       <div class="tiparea">
-        <p>已有账号？现在<router-link to="/login">登录</router-link></p>
+        <p>还没有账号？现在<router-link to="/register">注册</router-link></p>
       </div>
     </section>
   </div>
@@ -48,53 +35,27 @@
 <script>
 export default {
   data() {
-    var checkName = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("用户名不能为空"));
-      }
-      callback()
-    };
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
-      } else {
-        if (this.registerUser.checkPass !== "") {
-          this.$refs.registerForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.registerUser.password) {
-        callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
     return {
-      registerUser: {
-        name: "",
+      loginUser: {
         email: "",
-        password: "",
-        checkPass: "",
-        identity: ""
+        password: ""
       },
       rules: {
-        name: [
-          { validator: checkName, required: true, trigger: "blur" },
-          { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
-        ],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         password: [
-          { required: true, validator: validatePass, trigger: "blur" },
+          { required: true, validator: validatePass, trigger: "blur", },
           { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
-        ],
-        checkPass: [{ validator: validatePass2, trigger: "blur", required: true }]
+        ]
       }
     };
   },
@@ -103,13 +64,15 @@ export default {
       //console.log(this.registerUser)
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$request.post('/api/users/register', this.registerUser)
+          this.$request.post('/api/users/login', this.loginUser)
             .then(res => {
               this.$message({
-                message: '账号注册成功',
+                message: '账号登录成功',
                 type: 'success'
               })
-              this.$router.push('/login')
+              const { token } = res.data;
+              localStorage.setItem('eleToken', token)
+              this.$router.push('/index')
             })
         }
       })
@@ -124,7 +87,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/responsive.scss";
 
-.register {
+.login {
   position: relative;
   height: 100%;
   width: 100%;
@@ -157,6 +120,9 @@ export default {
         color: #ccc;
         margin-bottom: 20px;
       }
+    }
+    > .submit_btn {
+      width: 100%;
     }
     > .tiparea {
       text-align: right;

@@ -8,7 +8,7 @@
 // @ is an alias to /src
 
 export default {
-  name: '404'
+  name: 'not-found'
 }
 </script>
 
