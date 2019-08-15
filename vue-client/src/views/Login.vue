@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import jwt_decode from 'jwt-decode'
+
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -70,8 +72,16 @@ export default {
                 message: '账号登录成功',
                 type: 'success'
               })
+              //将token存储到localStorage
               const { token } = res.data;
               localStorage.setItem('eleToken', token)
+              //解析token
+              const decoded = jwt_decode(token)
+              console.log(decoded)
+              //存储到vuex
+              this.$store.dispatch('setAuthenticated', !this.isEmpty(decoded))
+              this.$store.dispatch('setUser', decoded)
+
               this.$router.push('/index')
             })
         }
@@ -79,6 +89,14 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    isEmpty(value) {
+      return (
+        value === undefined ||
+        value === null ||
+        (typeof value === 'object' && Object.keys(value).length === 0) ||
+        (typeof value === 'string' && value.trim().length === 0)
+      )
     }
   }
 };
