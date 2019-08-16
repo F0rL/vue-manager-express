@@ -17,9 +17,10 @@ export default {
 
 <style lang="scss" scoped>
   .home {
-    width: 100%;
     height: 100%;
-    // background: url(../assets/home-bg.jpg) no-repeat;
+    margin-left: 180px;
+    background: url(../assets/bg.jpg) no-repeat;
+    background-size: 100% 100%;
     > .container {
       width: 100%;
       height: 100%;
@@ -27,6 +28,7 @@ export default {
       text-align: center;
       color: #ccc;
       > .title {
+        padding-top: 30%;
         font-size: 40px;
       }
       > .lead {

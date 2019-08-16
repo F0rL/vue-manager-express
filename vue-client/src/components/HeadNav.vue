@@ -68,7 +68,6 @@ export default {
 
 <style lang="scss" scoped>
 .head-nav {
-  height: 60px;
   background-color: #324057;
   color: #fff;
   border-bottom: 1px solid #1f2d3d;

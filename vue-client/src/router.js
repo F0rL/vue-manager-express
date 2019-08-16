@@ -21,21 +21,19 @@ const router = new Router({
     },
     {
       path: "/index",
-      name: "index",
       component: Index,
       children: [
         { 
           path: '',
+          component: Home
+        },
+        { 
+          path: 'home',
           name: 'home',
           component: Home
         },
         { 
-          path: '/home',
-          name: 'home',
-          component: Home
-        },
-        { 
-          path: '/info',
+          path: 'info',
           name: 'info',
           component: Info
         }

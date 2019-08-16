@@ -50,6 +50,7 @@ export default {
 <style lang="scss" scoped>
 .info {
   height: 100%;
+  margin-left: 180px;
   .row-bg {
     width: 100%;
     height: 100%;
