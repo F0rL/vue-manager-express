@@ -28,7 +28,7 @@ export default {
       text-align: center;
       color: #ccc;
       > .title {
-        padding-top: 30%;
+        padding-top: 40vh;
         font-size: 40px;
       }
       > .lead {

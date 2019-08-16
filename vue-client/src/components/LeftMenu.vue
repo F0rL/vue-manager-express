@@ -16,7 +16,6 @@
         <template v-for="item in items">
           <el-submenu v-if="item.children" :index="item.path" :key="item.path">
             <template slot="title">
-              <i :class="'iconfont '+item.icon"></i>
               <span slot="title">{{ item.name }}</span>
             </template>
             <router-link v-for="(citem,cindex) in item.children" :to="citem.path" :key="cindex">
@@ -32,6 +31,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -45,11 +45,13 @@ export default {
         {
           icon: "icon-xinxiguanli",
           name: "信息管理",
-          path: "info",
+          path: "infoshow",
           children: [{ path: "info", name: "个人信息" }]
         }
       ]
     };
+  },
+  components: {
   }
 };
 </script>
