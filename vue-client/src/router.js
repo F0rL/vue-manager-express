@@ -4,6 +4,10 @@ import Index from "./views/Index.vue";
 import Register from "./views/Register.vue";
 import Login from "./views/Login.vue";
 import NotFound from "./views/NotFound.vue";
+import Home from "./views/Home.vue";
+import Info from "./views/Info.vue";
+
+
 
 Vue.use(Router);
 
@@ -18,7 +22,24 @@ const router = new Router({
     {
       path: "/index",
       name: "index",
-      component: Index
+      component: Index,
+      children: [
+        { 
+          path: '',
+          name: 'home',
+          component: Home
+        },
+        { 
+          path: '/home',
+          name: 'home',
+          component: Home
+        },
+        { 
+          path: '/info',
+          name: 'info',
+          component: Info
+        }
+      ]
     },
     {
       path: "/login",

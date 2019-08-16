@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="index">
     <head-nav></head-nav>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import HeadNav from '@/components/HeadNav.vue' 
-
 export default {
   name: 'index',
   components: {
@@ -15,3 +15,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.index {
+  width: 100%;
+  height: 100%;
+}  
+</style>

@@ -50,7 +50,9 @@ export default {
           break;
       }
     },
-    showInfoList() {},
+    showInfoList() {
+      this.$router.push('/info')
+    },
     logout() {
       //清除token
       localStorage.removeItem('eleToken')
@@ -66,14 +68,14 @@ export default {
 
 <style lang="scss" scoped>
 .head-nav {
-  width: 100%;
   height: 60px;
-  padding: 5px;
   background-color: #324057;
   color: #fff;
   border-bottom: 1px solid #1f2d3d;
+  overflow: hidden;
   .logo-container {
     line-height: 60px;
+    margin-left: 20px;
     .logo {
       height: 50px;
       width: 50px;
@@ -92,7 +94,7 @@ export default {
     line-height: 60px;
     text-align: right;
     float: right;
-    padding-right: 10px;
+    padding-right: 20px;
     .avatar {
       width: 40px;
       height: 40px;
