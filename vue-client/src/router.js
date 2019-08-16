@@ -6,6 +6,7 @@ import Login from "./views/Login.vue";
 import NotFound from "./views/NotFound.vue";
 import Home from "./views/Home.vue";
 import Info from "./views/Info.vue";
+import FundList from "./views/FundList.vue";
 
 
 
@@ -36,7 +37,12 @@ const router = new Router({
           path: '/info',
           name: 'info',
           component: Info
-        }
+        },
+        { 
+          path: '/fundlist',
+          name: 'fundlist',
+          component: FundList
+        },
       ]
     },
     {

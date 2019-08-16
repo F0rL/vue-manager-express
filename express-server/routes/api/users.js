@@ -73,7 +73,7 @@ router.post('/login', (req, res) => {
                     avatar: user.avatar,
                     identity: user.identity
                   }
-                  jwt.sign(rule, jwtKey, {expiresIn: 10}, (err, token) => {
+                  jwt.sign(rule, jwtKey, {expiresIn: 3600}, (err, token) => {
                     if(err) throw err
 
                     res.json({
