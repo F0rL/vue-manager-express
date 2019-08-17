@@ -169,7 +169,7 @@ export default {
       console.log(index, row);
     },
     handleDelete(index, row) {
-      this.$request.delete(`/api/profiles/delete/${row._id}`).then(res => {
+      this.$request.delete(`/api/profiles/delete/${row._id}`).then(() => {
         this.$message({
           type: "warning",
           message: "删除成功"
