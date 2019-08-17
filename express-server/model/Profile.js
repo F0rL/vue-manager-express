@@ -25,7 +25,7 @@ const ProfileSchema = new Schema({
   remark: {
     type: String,
   },
-  data: {
+  date: {
     type: Date,
     default: Date.now
   }
