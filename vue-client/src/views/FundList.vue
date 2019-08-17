@@ -57,24 +57,41 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <el-row>
+        <el-col :span="24">
+          <div class="pagination">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="paginations.page_index"
+              :page-size="paginations.page_size"
+              :page-sizes="paginations.page_sizes"
+              :layout="paginations.layout"
+              :total="paginations.total"
+            ></el-pagination>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-    <show-dialog :dialog='dialog' @update="getProfile" :formData='formData'></show-dialog>
+    <show-dialog :dialog="dialog" @update="getProfile" :formData="formData"></show-dialog>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import ShowDialog from '@/components/ShowDialog'
+import ShowDialog from "@/components/ShowDialog";
 
 export default {
   name: "fundList",
   data() {
     return {
       tableData: [],
+      allTableData: [],
       dialog: {
         show: false,
-        title:'',
-        option: 'edit'
+        title: "",
+        option: "edit"
       },
       formData: {
         type: "",
@@ -85,6 +102,13 @@ export default {
         remark: "",
         id: ""
       },
+      paginations: {
+        page_index: 1, //当前页面
+        total: 0, //总页数
+        page_size:5, //一页显示多少条
+        page_sizes: [5,10,15,20], // 设置一页显示多少条
+        layout: 'total,sizes,prev,pager,next,jumper' //翻页属性
+      }
     };
   },
   created() {
@@ -95,16 +119,18 @@ export default {
       this.$request
         .get("/api/profiles")
         .then(res => {
-          this.tableData = res.data;
+          this.allTableData = res.data;
+          // 设置分页
+          this.setpagination()
         })
         .catch(error => console.log(error));
     },
     handleEdit(index, row) {
       this.dialog = {
         show: true,
-        title: '修改信息',
-        option: 'edit'
-      }
+        title: "修改信息",
+        option: "edit"
+      };
       this.formData = {
         type: row.type,
         describe: row.describe,
@@ -113,27 +139,55 @@ export default {
         cash: row.cash,
         remark: row.remark,
         id: row._id
-      }
+      };
       console.log(index, row);
     },
     handleDelete(index, row) {
-      this.$request.delete(`/api/profiles/delete/${row._id}`)
-        .then(res => {
-          this.$message({
-            type: 'warning',
-            message: '删除成功'
-          })
-          this.getProfile()
-        })
+      this.$request.delete(`/api/profiles/delete/${row._id}`).then(res => {
+        this.$message({
+          type: "warning",
+          message: "删除成功"
+        });
+        this.getProfile();
+      });
       console.log(index, row);
     },
-    handleAdd(){
+    handleAdd() {
       this.dialog = {
         show: true,
-        title: '添加信息',
-        option: 'add'
+        title: "添加信息",
+        option: "add"
+      };
+      this.formData = {};
+    },
+    handleSizeChange(page_size) {
+      this.paginations.page_index = 1
+      this.paginations.page_size = page_size
+      this.tableData = this.allTableData.filter((item, index) => {
+        return index < page_size
+      })
+    },
+    handleCurrentChange(page) {
+      console.log(page)
+      let index = this.paginations.page_size * (page - 1)
+      let nums = this.paginations.page_size * page
+      let tables = []
+      for(let i = index; i < nums; i++) {
+        if(this.allTableData[i]) {
+          tables.push(this.allTableData[i])
+        }
+        this.tableData = tables
       }
-      this.formData = {}
+    },
+    setpagination() {
+      //初始化
+      this.paginations.total = this.allTableData.length
+      this.paginations.page_index = 1
+      this.paginations.page_size =5
+      // 设置展示数据
+      this.tableData = this.allTableData.filter((item, index) => {
+        return index < this.paginations.page_size
+      })
     }
   },
   components: {
@@ -155,6 +209,9 @@ export default {
       float: right;
     }
   }
-
+  .pagination {
+    text-align: right;
+    margin-top: 10px;
+  }
 }
 </style>
