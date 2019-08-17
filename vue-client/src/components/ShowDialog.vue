@@ -1,7 +1,7 @@
 <template>
   <div class="dialog">
     <el-dialog
-      title="添加信息"
+      :title="dialog.title"
       :visible.sync="dialog.show"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
@@ -55,15 +55,6 @@ export default {
   name: "showDialog",
   data() {
     return {
-      formData: {
-        type: "",
-        describe: "",
-        income: "",
-        expend: "",
-        cash: "",
-        remark: "",
-        id: ""
-      },
       format_type_list: [
         "提现",
         "购买商品",
@@ -85,21 +76,25 @@ export default {
   props: {
     dialog: {
       type: Object
+    },
+    formData: {
+      type: Object
     }
   },
   methods: {
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if(valid) {
-          this.$request.post('/api/profiles/add', this.formData)
+          const url = this.dialog.option === 'add' ? 'add' : `edit/${this.formData.id}`;
+          this.$request.post(`/api/profiles/${url}`, this.formData)
             .then(res => {
               this.$message({
-                message: '添加成功',
+                message: '数据上传成功',
                 type: 'success'
               })
             })
-            this.dialog.show = false
-            this.$emit('update')
+        this.dialog.show = false
+        this.$emit('update')
         }
       })
     }

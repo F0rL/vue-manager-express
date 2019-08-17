@@ -58,7 +58,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <show-dialog :dialog='dialog' @update="getProfile"></show-dialog>
+    <show-dialog :dialog='dialog' @update="getProfile" :formData='formData'></show-dialog>
   </div>
 </template>
 
@@ -72,8 +72,19 @@ export default {
     return {
       tableData: [],
       dialog: {
-        show: false
-      }
+        show: false,
+        title:'',
+        option: 'edit'
+      },
+      formData: {
+        type: "",
+        describe: "",
+        income: "",
+        expend: "",
+        cash: "",
+        remark: "",
+        id: ""
+      },
     };
   },
   created() {
@@ -89,14 +100,40 @@ export default {
         .catch(error => console.log(error));
     },
     handleEdit(index, row) {
-
+      this.dialog = {
+        show: true,
+        title: '修改信息',
+        option: 'edit'
+      }
+      this.formData = {
+        type: row.type,
+        describe: row.describe,
+        income: row.income,
+        expend: row.expend,
+        cash: row.cash,
+        remark: row.remark,
+        id: row._id
+      }
       console.log(index, row);
     },
     handleDelete(index, row) {
+      this.$request.delete(`/api/profiles/delete/${row._id}`)
+        .then(res => {
+          this.$message({
+            type: 'warning',
+            message: '删除成功'
+          })
+          this.getProfile()
+        })
       console.log(index, row);
     },
     handleAdd(){
-      this.dialog.show = true
+      this.dialog = {
+        show: true,
+        title: '添加信息',
+        option: 'add'
+      }
+      this.formData = {}
     }
   },
   components: {
