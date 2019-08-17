@@ -4,7 +4,7 @@
 ## 功能
 后台基于express，前端基于vue和element-ui
 
-支持信息的增删改查，分页及删选，权限控制
+后端实现jwt权鉴，支持信息的增删改查，分页及删选，权限控制
 
 ## 启动
 cd express-server && yarn install && yarn run server
@@ -26,7 +26,7 @@ POST，登录，传入{email, password}
 #### /profiles/add
 POST，新增信息,传入{type,describe,income,expend,cash,remark}
 
-####/profiles/edit/
+#### /profiles/edit/
 POST，更新信息，传入更新内容
 
 #### /profiles/delete/
