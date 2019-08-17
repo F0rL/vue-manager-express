@@ -1,13 +1,27 @@
 <template>
   <div class="fund-list">
     <div class="table_header">
-      <el-form :inline="true" ref="add_data">
+      <el-form :inline="true" ref="add_data" :model="search_data">
+        <el-form-item label="按照时间筛选:">
+          <el-date-picker v-model="search_data.startTime" type="datetime" placeholder="选择开始时间"></el-date-picker>--
+          <el-date-picker v-model="search_data.endTime" type="datetime" placeholder="选择结束时间"></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="small" icon="search" @click="handleSearch">筛选</el-button>
+        </el-form-item>
         <el-form-item class="btnAdd">
-          <el-button type="primary" size="small" icon="view" @click="handleAdd">添加</el-button>
+          <el-button 
+            type="primary" 
+            size="small" 
+            icon="view" 
+            @click="handleAdd"
+            v-if="user.identity === 'manager'"
+          >添加</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="table_container">
+      <!-- 表格主体 -->
       <el-table
         v-if="tableData.length > 0"
         :data="tableData"
@@ -40,7 +54,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="remark" label="备注" align="center"></el-table-column>
-        <el-table-column prop="operation" align="center" width="180" label="操作">
+        <el-table-column prop="operation" align="center" width="180" label="操作" v-if="user.identity === 'manager'">
           <template slot-scope="scope">
             <el-button
               type="warning"
@@ -74,6 +88,7 @@
         </el-col>
       </el-row>
     </div>
+    <!-- 弹出窗口 -->
     <show-dialog :dialog="dialog" @update="getProfile" :formData="formData"></show-dialog>
   </div>
 </template>
@@ -105,11 +120,21 @@ export default {
       paginations: {
         page_index: 1, //当前页面
         total: 0, //总页数
-        page_size:5, //一页显示多少条
-        page_sizes: [5,10,15,20], // 设置一页显示多少条
-        layout: 'total,sizes,prev,pager,next,jumper' //翻页属性
-      }
+        page_size: 5, //一页显示多少条
+        page_sizes: [5, 10, 15, 20], // 设置一页显示多少条
+        layout: "total,sizes,prev,pager,next,jumper" //翻页属性
+      },
+      search_data: {
+        startTime: "",
+        endTime: ""
+      },
+      filterTabledata: []
     };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.user;
+    }
   },
   created() {
     this.getProfile();
@@ -120,8 +145,9 @@ export default {
         .get("/api/profiles")
         .then(res => {
           this.allTableData = res.data;
+          this.filterTabledata = res.data;
           // 设置分页
-          this.setpagination()
+          this.setpagination();
         })
         .catch(error => console.log(error));
     },
@@ -161,33 +187,52 @@ export default {
       this.formData = {};
     },
     handleSizeChange(page_size) {
-      this.paginations.page_index = 1
-      this.paginations.page_size = page_size
+      this.paginations.page_index = 1;
+      this.paginations.page_size = page_size;
       this.tableData = this.allTableData.filter((item, index) => {
-        return index < page_size
-      })
+        return index < page_size;
+      });
     },
     handleCurrentChange(page) {
-      console.log(page)
-      let index = this.paginations.page_size * (page - 1)
-      let nums = this.paginations.page_size * page
-      let tables = []
-      for(let i = index; i < nums; i++) {
-        if(this.allTableData[i]) {
-          tables.push(this.allTableData[i])
+      let index = this.paginations.page_size * (page - 1);
+      let nums = this.paginations.page_size * page;
+      let tables = [];
+      for (let i = index; i < nums; i++) {
+        if (this.allTableData[i]) {
+          tables.push(this.allTableData[i]);
         }
-        this.tableData = tables
+        this.tableData = tables;
       }
     },
     setpagination() {
       //初始化
-      this.paginations.total = this.allTableData.length
-      this.paginations.page_index = 1
-      this.paginations.page_size =5
+      this.paginations.total = this.allTableData.length;
+      this.paginations.page_index = 1;
+      this.paginations.page_size = 5;
       // 设置展示数据
       this.tableData = this.allTableData.filter((item, index) => {
-        return index < this.paginations.page_size
-      })
+        return index < this.paginations.page_size;
+      });
+    },
+    handleSearch() {
+      //筛选
+      if (!this.search_data.startTime || !this.search_data.endTime) {
+        this.$message({
+          type: "warning",
+          message: "请选择时间区间"
+        });
+        this.getProfile();
+        return;
+      }
+      const sTime = this.search_data.startTime;
+      const eTime = this.search_data.endTime;
+      this.allTableData = this.filterTabledata.filter(item => {
+        let date = new Date(item.date);
+        let time = date.getTime();
+        return time >= sTime && time <= eTime;
+      });
+
+      this.setpagination();
     }
   },
   components: {

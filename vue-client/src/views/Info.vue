@@ -12,13 +12,13 @@
             <icon-base icon-name="icon-user" width="28" height="28">
               <icon-user />
             </icon-base>
-            <span>{{user.name}}</span>
+            <span>姓名： {{user.name}}</span>
           </div>
           <div class="user-item">
             <icon-base icon-name="icon-user" width="28" height="28">
               <user-folder />
             </icon-base>
-            <span>{{user.identity === 'identity' ? '员工' : '管理员'}}</span>
+            <span>职位： {{user.identity === 'employee' ? '员工' : '管理员'}}</span>
           </div>
         </div>
       </el-col>

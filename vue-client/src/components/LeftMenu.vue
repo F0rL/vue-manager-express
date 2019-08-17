@@ -8,10 +8,12 @@
         active-text-color="#409eff"
       >
         <router-link to="home">
-          <el-menu-item index="0">
-            <i class="iconfont"></i>
-            <span class="slot">首页</span>
-          </el-menu-item>
+          <router-link to="/home">
+            <el-menu-item index="0">
+              <i class="iconfont"></i>
+              <span class="slot">首页</span>
+            </el-menu-item>
+          </router-link>
         </router-link>
         <template v-for="item in items">
           <el-submenu v-if="item.children" :index="item.path" :key="item.path">
@@ -31,7 +33,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -51,8 +52,7 @@ export default {
       ]
     };
   },
-  components: {
-  }
+  components: {}
 };
 </script>
 
