@@ -118,9 +118,9 @@ export default {
   );
   > .form_container {
     position: absolute;
-    top: 10%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     @include pc {
       width: 370px;
     }
